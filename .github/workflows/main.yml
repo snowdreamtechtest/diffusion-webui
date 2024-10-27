@@ -66,7 +66,7 @@ jobs:
         uses: docker/metadata-action@v5.5.1
         with:
           images: |
-            name=snowdreamtechtest/diffusion-webui,enable=true
+            name=ghcr.io/snowdreamtechtest/diffusion-webui,enable=true
           flavor: |
             latest=false  
             prefix=
