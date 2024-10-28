@@ -1,7 +1,7 @@
 #!/bin/sh
 
-# export DIFFUSION="/volume1/docker/diffusion"
-export DIFFUSION="/Users/snowdream/Docker/diffusion"
+export DIFFUSION="/volume1/docker/diffusion"
+# export DIFFUSION="/Users/snowdream/Docker/diffusion"
 export MODELS="${DIFFUSION}/models"
 export OUTPUTS="${DIFFUSION}/outputs"
 export EXTENSIONS="${DIFFUSION}/extensions"
@@ -30,11 +30,11 @@ prepare(){
 prepare
 
 # docker run
-docker run --rm --name diffusion_webui \
+docker run --gpus all --restart always --name diffusion_webui -d \
     -v ${MODELS}:/app/models \
     -v ${OUTPUTS}:/app/outputs \
     -v ${EXTENSIONS}:/app/extensions \
     -v ${CONFIGS}:/app/configs \
     -v ${OTHERS}:/temp/others \
     -p 7860:7860 \
-   dev/diffusion-webui:latest
+    ghcr.io/snowdreamtechtest/diffusion-webui:latest

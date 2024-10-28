@@ -14,10 +14,12 @@ LABEL org.opencontainers.image.authors="Snowdream Tech" \
 
 ENV DEBIAN_FRONTEND=noninteractive \
     # keep the docker container running
-    KEEPALIVE=0 \
+    KEEPALIVE=1 \
     # Ensure the container exec commands handle range of utf8 characters based of
     # default locales in base image (https://github.com/docker-library/docs/tree/master/debian#locales)
     LANG=C.UTF-8 
+
+WORKDIR /app
 
 # RUN set -eux \
 #     && apt-get -qqy update  \
@@ -42,11 +44,11 @@ ENV DEBIAN_FRONTEND=noninteractive \
 #     && rm -rf /var/tmp/* \
 #     && echo 'export PROMPT_COMMAND="history -a; $PROMPT_COMMAND"' >> /etc/bash.bashrc 
 
-RUN sed -i -E "s/#?export\sCOMMANDLINE_ARGS=\"\"/export COMMANDLINE_ARGS=\"--skip-torch-cuda-test --precision full --no-half\"/g" webui-user.sh \
-    && sed -i -E "s/#?set\sCOMMANDLINE_ARGS=/set COMMANDLINE_ARGS=\"--skip-torch-cuda-test --precision full --no-half\"/g" webui-user.bat
+RUN sed -i -E "s/#?export\sCOMMANDLINE_ARGS=\"\"/export COMMANDLINE_ARGS=\"--lowvram --precision full --no-half --skip-torch-cuda-test\"/g" webui-user.sh \
+    && sed -i -E "s/#?set\sCOMMANDLINE_ARGS=/set COMMANDLINE_ARGS=--lowvram --precision full --no-half --skip-torch-cuda-test/g" webui-user.bat
 
 COPY docker-entrypoint.sh /usr/local/bin/
 
 ENTRYPOINT ["docker-entrypoint.sh"]
 
-CMD ["/bin/sh" "-c" "python webui.py"]
+CMD ["python webui.py"]
